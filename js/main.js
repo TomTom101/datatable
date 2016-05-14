@@ -1,23 +1,34 @@
-var data, i, j;
-
-data = [];
-
-for (i = j = 1; j <= 100; i = ++j) {
-  data.push({
-    product: faker.commerce.product(),
-    price: faker.commerce.price()
-  });
-}
-
 $(document).ready(function() {
-  return $('#example').DataTable({
-    data: data,
+  $('#grid').w2grid({
+    name: 'grid',
+    show: {
+      toolbar: true,
+      toolbarSave: true
+    },
+    onSubmit: function(event) {
+      return console.log(event);
+    },
+    method: 'GET',
     columns: [
       {
-        data: "product"
+        field: 'product',
+        editable: {
+          type: 'text'
+        },
+        caption: 'Product',
+        size: '30%',
+        sortable: true
       }, {
-        data: "price"
+        field: 'price',
+        editable: {
+          type: 'float'
+        },
+        render: 'currency',
+        caption: 'Price',
+        size: '120px',
+        sortable: true
       }
     ]
   });
+  return w2ui['grid'].load('data');
 });
