@@ -52,16 +52,9 @@
           <tr>
               <th data-field="state" data-checkbox="true"/>
               <th data-field="product" data-sortable="true">Product</th>
-              <th data-field="price" data-sortable="true" data-formatter="priceFormatter">Price</th>
+              <th data-field="price" data-sortable="true" data-formatter="priceFormatter" data-footer-formatter="sumFormatter">Price</th>
           </tr>
           </thead>
-          <tfoot>
-            <tr>
-              <th></th>
-              <th></th>
-              <th>Sum</th>
-            </tr>
-            </tfoot>
         </table>
 
 
@@ -96,6 +89,7 @@
         <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.11.2.min.js"><\/script>')</script>
 
         <script src="js/vendor/bootstrap.min.js"></script>
+        <script src="bower_components/lodash/dist/lodash.min.js"></script>
         <script src="node_modules/faker/build/build/faker.min.js"></script>
         <script src="bower_components/bootstrap-table/dist/bootstrap-table.min.js"></script>
         <script src="bower_components/bootstrap-table/dist/extensions/toolbar/bootstrap-table-toolbar.min.js"></script>
