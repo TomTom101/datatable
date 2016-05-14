@@ -1,6 +1,4 @@
-var _, app, data, express, faker, getBooking, getProduct, http;
-
-_ = require("lodash");
+var app, data, express, faker, getBooking, getProduct, http;
 
 express = require('express');
 

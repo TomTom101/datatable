@@ -1,5 +1,4 @@
 
-_ = require "lodash"
 express = require 'express'
 app = express()
 faker = require 'faker'

@@ -1,0 +1,22 @@
+{
+  "name": "datatable",
+  "description": "",
+  "main": "index.js",
+  "authors": [
+    "Thomas Brandl <thobra@gmail.com>"
+  ],
+  "license": "BSD-2-Clause",
+  "homepage": "",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap-table": "^1.10.1",
+    "lodash": "^4.12.0"
+  }
+}
