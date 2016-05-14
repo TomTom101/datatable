@@ -1,5 +1,11 @@
+var priceFormatter;
+
+priceFormatter = function(value) {
+  return Math.round(value);
+};
+
 $(document).ready(function() {
-  $('#grid').w2grid({
+  return $('#grid').w2grid({
     name: 'grid',
     show: {
       toolbar: true,
@@ -30,5 +36,4 @@ $(document).ready(function() {
       }
     ]
   });
-  return w2ui['grid'].load('data');
 });

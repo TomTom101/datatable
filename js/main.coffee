@@ -1,5 +1,6 @@
 
-
+priceFormatter = (value) ->
+  Math.round value
 
 
 $(document).ready () ->
@@ -18,4 +19,3 @@ $(document).ready () ->
         #      { product: 'TEST', price: 100.23 }
         #  ]
     )
-  w2ui['grid'].load('data')

@@ -13,12 +13,11 @@ http = require('http').Server(app)
 data = []
 for i in [1..100]
   data.push
-    recid: i
     product: faker.commerce.product()
     price: faker.commerce.price()
 
 app.get "/data", (request, response) ->
-  response.json records: data
+  response.json data
   response.end()
 
 app.get "/", (request, response) ->

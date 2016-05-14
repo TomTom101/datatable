@@ -24,16 +24,13 @@ data = [];
 
 for (i = j = 1; j <= 100; i = ++j) {
   data.push({
-    recid: i,
     product: faker.commerce.product(),
     price: faker.commerce.price()
   });
 }
 
 app.get("/data", function(request, response) {
-  response.json({
-    records: data
-  });
+  response.json(data);
   return response.end();
 });
 
