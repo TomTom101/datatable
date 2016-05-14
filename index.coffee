@@ -11,13 +11,23 @@ app.use '/bower_components',express.static('bower_components')
 http = require('http').Server(app)
 
 data = []
-for i in [1..100]
-  data.push
-    product: faker.commerce.product()
-    price: faker.commerce.price()
+
+getProduct = ->
+  product: faker.commerce.product()
+  price: faker.commerce.price()
+
+getBooking = ->
+  date: faker.date.recent(30)
+  product: faker.commerce.product()
+  price: faker.commerce.price()
+
 
 app.get "/data", (request, response) ->
-  response.json data
+  response.json (getProduct() for i in [1..100])
+  response.end()
+
+app.get "/daily", (request, response) ->
+  response.json (getBooking() for i in [1..100])
   response.end()
 
 app.get "/", (request, response) ->

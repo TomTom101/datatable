@@ -1,4 +1,4 @@
-var _, app, data, express, faker, http, i, j;
+var _, app, data, express, faker, getBooking, getProduct, http;
 
 _ = require("lodash");
 
@@ -22,15 +22,44 @@ http = require('http').Server(app);
 
 data = [];
 
-for (i = j = 1; j <= 100; i = ++j) {
-  data.push({
+getProduct = function() {
+  return {
     product: faker.commerce.product(),
     price: faker.commerce.price()
-  });
-}
+  };
+};
+
+getBooking = function() {
+  return {
+    date: faker.date.recent(30),
+    product: faker.commerce.product(),
+    price: faker.commerce.price()
+  };
+};
 
 app.get("/data", function(request, response) {
-  response.json(data);
+  var i;
+  response.json((function() {
+    var j, results;
+    results = [];
+    for (i = j = 1; j <= 100; i = ++j) {
+      results.push(getProduct());
+    }
+    return results;
+  })());
+  return response.end();
+});
+
+app.get("/daily", function(request, response) {
+  var i;
+  response.json((function() {
+    var j, results;
+    results = [];
+    for (i = j = 1; j <= 100; i = ++j) {
+      results.push(getBooking());
+    }
+    return results;
+  })());
   return response.end();
 });
 
