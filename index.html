@@ -45,11 +45,14 @@
                data-toggle="table"
                data-height="460"
                data-toolbar="#toolbar"
+               data-search="true"
+               data-advanced-search="true"
                data-url="./data">
           <thead>
           <tr>
-              <th data-field="product">Product</th>
-              <th data-field="price" data-formatter="priceFormatter">Price</th>
+              <th data-field="state" data-checkbox="true"/>
+              <th data-field="product" data-sortable="true">Product</th>
+              <th data-field="price" data-sortable="true" data-formatter="priceFormatter">Price</th>
           </tr>
           </thead>
         </table>
@@ -88,6 +91,7 @@
         <script src="js/vendor/bootstrap.min.js"></script>
         <script src="node_modules/faker/build/build/faker.min.js"></script>
         <script src="bower_components/bootstrap-table/dist/bootstrap-table.min.js"></script>
+        <script src="bower_components/bootstrap-table/dist/extensions/toolbar/bootstrap-table-toolbar.min.js"></script>
 
         <script src="js/main.js"></script>
     </body>
