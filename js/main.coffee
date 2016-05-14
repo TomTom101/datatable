@@ -1,14 +1,15 @@
-dataSet =
-  [
-    (name: "bla", salary: 102)
-    (name: "Goasd", salary: 234)
-  ]
+data = []
+for i in [1..100]
+  data.push
+    product: faker.commerce.product()
+    price: faker.commerce.price()
+
 
 
 $(document).ready () ->
   $('#example').DataTable
-    data: dataSet,
+    data: data,
     columns: [
-        (data: "name" )
-        (data: "salary" )
+        (data: "product" )
+        (data: "price" )
     ]

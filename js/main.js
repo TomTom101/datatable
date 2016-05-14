@@ -1,23 +1,22 @@
-var dataSet;
+var data, i, j;
 
-dataSet = [
-  {
-    name: "bla",
-    salary: 102
-  }, {
-    name: "Goasd",
-    salary: 234
-  }
-];
+data = [];
+
+for (i = j = 1; j <= 100; i = ++j) {
+  data.push({
+    product: faker.commerce.product(),
+    price: faker.commerce.price()
+  });
+}
 
 $(document).ready(function() {
   return $('#example').DataTable({
-    data: dataSet,
+    data: data,
     columns: [
       {
-        data: "name"
+        data: "product"
       }, {
-        data: "salary"
+        data: "price"
       }
     ]
   });
