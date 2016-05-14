@@ -41,8 +41,8 @@
         <div id="toolbar">
           <button id="get-data" class="btn btn-default">getData</button>
       </div>
-        <table id="table"
-               data-toggle="table"
+        <table id="products"
+               data-toggle="products"
                data-pagination="true"
                data-toolbar="#toolbar"
                data-search="true"
@@ -59,6 +59,16 @@
           </thead>
         </table>
 
+        <table id="categories"
+               data-toggle="categories"
+               data-show-footer="true">
+          <thead>
+          <tr>
+              <th data-field="category" data-sortable="true">Product</th>
+              <th data-field="sum" data-sortable="true" data-formatter="priceFormatter" data-footer-formatter="sumFormatter">Sum</th>
+          </tr>
+          </thead>
+        </table>
 
       </div>
     </div>
