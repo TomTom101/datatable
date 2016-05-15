@@ -43,6 +43,8 @@
       </div>
         <table id="products"
                data-toggle="products"
+               data-unique-id="id"
+               data-maintain-selected="true"
                data-pagination="true"
                data-toolbar="#toolbar"
                data-search="true"
@@ -55,13 +57,16 @@
               <th data-field="state" data-checkbox="true"/>
               <th data-field="product" data-sortable="true">Product</th>
               <th data-field="price" data-sortable="true" data-formatter="priceFormatter" data-footer-formatter="sumFormatter">Price</th>
+              <th data-field="units" data-sortable="true">Units</th>
+              <th data-field="price" data-editable="true" data-sortable="true" data-formatter="dailyFormatter" data-footer-formatter="sumFormatter">Daily</th>
           </tr>
           </thead>
         </table>
 
         <table id="categories"
                data-toggle="categories"
-               data-show-footer="true">
+               data-show-footer="true"
+               class="table table-no-bordered">
           <thead>
           <tr>
               <th data-field="category" data-sortable="true">Product</th>
