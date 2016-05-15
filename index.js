@@ -1,10 +1,14 @@
-var app, categories, data, express, faker, getBooking, getProduct, http;
+var app, bodyParser, categories, data, express, faker, getBooking, getProduct, http, jsonfile, save;
 
 express = require('express');
 
 app = express();
 
 faker = require('faker');
+
+bodyParser = require('body-parser');
+
+jsonfile = require('jsonfile');
 
 app.use('/js', express["static"]('js'));
 
@@ -15,6 +19,10 @@ app.use('/css', express["static"]('css'));
 app.use('/node_modules', express["static"]('node_modules'));
 
 app.use('/bower_components', express["static"]('bower_components'));
+
+app.use(bodyParser.json({
+  extended: true
+}));
 
 http = require('http').Server(app);
 
@@ -44,6 +52,26 @@ getBooking = function() {
     price: faker.commerce.price()
   };
 };
+
+save = function(data) {
+  var d, date, file, h, m, y;
+  date = new Date;
+  d = date.getUTCDate();
+  m = date.getUTCMonth() + 1;
+  y = date.getUTCFullYear();
+  h = date.getUTCHours();
+  file = __dirname + "/files/" + d + m + y + "-" + h;
+  return jsonfile.writeFile(file, data, function(err) {
+    return console.log(err);
+  });
+};
+
+app.post("/data", function(request, response) {
+  save(request.body);
+  return response.send({
+    message: "ok"
+  });
+});
 
 app.get("/data", function(request, response) {
   var i;

@@ -41,11 +41,21 @@ onCheck = ->
 $products.bootstrapTable
   onLoadSuccess: groupedData
   onCheck: onCheck
+  onCheckSome: onCheck
   onUncheck: onCheck
+  onUncheckSome: onCheck
+  onCheckAll: onCheck
+  onCheckAllSome: onCheck
   onCheckSome: () -> console.log "check some"
 
 $(document).ready () ->
 
-  $('#get-data').click ->
+  $('#save-data').click ->
     data = $products.bootstrapTable 'getData'
-    alert JSON.stringify data
+    $.ajax
+      type: 'POST'
+      contentType: 'application/json'
+      data: JSON.stringify(data)
+      url: './data'
+      success: (data) -> console.log data
+    #alert JSON.stringify data

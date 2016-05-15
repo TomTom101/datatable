@@ -60,16 +60,28 @@ onCheck = function() {
 $products.bootstrapTable({
   onLoadSuccess: groupedData,
   onCheck: onCheck,
+  onCheckSome: onCheck,
   onUncheck: onCheck,
+  onUncheckSome: onCheck,
+  onCheckAll: onCheck,
+  onCheckAllSome: onCheck,
   onCheckSome: function() {
     return console.log("check some");
   }
 });
 
 $(document).ready(function() {
-  return $('#get-data').click(function() {
+  return $('#save-data').click(function() {
     var data;
     data = $products.bootstrapTable('getData');
-    return alert(JSON.stringify(data));
+    return $.ajax({
+      type: 'POST',
+      contentType: 'application/json',
+      data: JSON.stringify(data),
+      url: './data',
+      success: function(data) {
+        return console.log(data);
+      }
+    });
   });
 });
