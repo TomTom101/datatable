@@ -1,4 +1,4 @@
-var app, data, express, faker, getBooking, getProduct, http;
+var app, categories, data, express, faker, getBooking, getProduct, http;
 
 express = require('express');
 
@@ -20,10 +20,20 @@ http = require('http').Server(app);
 
 data = [];
 
-getProduct = function() {
+categories = ['Maschine content', 'Komplete', 'Traktor SW'];
+
+getProduct = function(id) {
+  var numOptions;
+  numOptions = {
+    min: 0,
+    max: 10,
+    precision: 0.5
+  };
   return {
-    product: faker.commerce.product(),
-    price: faker.commerce.price()
+    id: id,
+    product: categories[Math.floor(Math.random() * categories.length)],
+    price: faker.commerce.price(),
+    units: faker.random.number(numOptions)
   };
 };
 
@@ -40,8 +50,8 @@ app.get("/data", function(request, response) {
   response.json((function() {
     var j, results;
     results = [];
-    for (i = j = 1; j <= 100; i = ++j) {
-      results.push(getProduct());
+    for (i = j = 1; j <= 20; i = ++j) {
+      results.push(getProduct(i));
     }
     return results;
   })());
@@ -54,7 +64,7 @@ app.get("/daily", function(request, response) {
     var j, results;
     results = [];
     for (i = j = 1; j <= 100; i = ++j) {
-      results.push(getBooking());
+      results.push(getBooking(i));
     }
     return results;
   })());

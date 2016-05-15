@@ -11,9 +11,18 @@ http = require('http').Server(app)
 
 data = []
 
-getProduct = ->
-  product: faker.commerce.product()
+categories = ['Maschine content', 'Komplete', 'Traktor SW']
+
+getProduct = (id)->
+  numOptions=
+    min: 0
+    max: 10
+    precision: 0.5
+  #product: faker.commerce.product()
+  id: id
+  product: categories[Math.floor(Math.random()*categories.length)];
   price: faker.commerce.price()
+  units: faker.random.number numOptions
 
 getBooking = ->
   date: faker.date.recent(30)
@@ -22,11 +31,11 @@ getBooking = ->
 
 
 app.get "/data", (request, response) ->
-  response.json (getProduct() for i in [1..100])
+  response.json (getProduct(i) for i in [1..20])
   response.end()
 
 app.get "/daily", (request, response) ->
-  response.json (getBooking() for i in [1..100])
+  response.json (getBooking(i) for i in [1..100])
   response.end()
 
 app.get "/", (request, response) ->
