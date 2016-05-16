@@ -1,4 +1,4 @@
-var app, bodyParser, categories, data, express, faker, getBooking, getProduct, http, jsonfile, save;
+var app, bodyParser, categories, data, express, faker, getBooking, getProduct, http, jsonfile, save, unitOptions;
 
 express = require('express');
 
@@ -28,20 +28,22 @@ http = require('http').Server(app);
 
 data = [];
 
-categories = ['Maschine content', 'Komplete', 'Traktor SW'];
+categories = ['Maschine content', 'Komplete', 'Komplete', 'Komplete', 'Traktor SW', 'Traktor SW'];
 
-getProduct = function(id) {
-  var numOptions;
-  numOptions = {
-    min: 0,
-    max: 10,
-    precision: 0.5
-  };
+unitOptions = {
+  min: 1,
+  max: 20,
+  precision: 0.5
+};
+
+getProduct = function(id, idx) {
+  var price;
+  price = (idx + 1) * 100;
   return {
-    id: id,
-    product: categories[Math.floor(Math.random() * categories.length)],
-    price: faker.commerce.price(),
-    units: faker.random.number(numOptions)
+    id: "" + (idx + 1) + price,
+    product: id,
+    price: price,
+    units: faker.random.number(unitOptions)
   };
 };
 
@@ -66,7 +68,9 @@ save = function(data) {
   });
 };
 
-app.post("/data", function(request, response) {
+app.get("/files", function(request, response) {});
+
+app.post("/files", function(request, response) {
   save(request.body);
   return response.send({
     message: "ok"
@@ -74,12 +78,13 @@ app.post("/data", function(request, response) {
 });
 
 app.get("/data", function(request, response) {
-  var i;
+  var i, k;
   response.json((function() {
-    var j, results;
+    var j, len, results;
     results = [];
-    for (i = j = 1; j <= 20; i = ++j) {
-      results.push(getProduct(i));
+    for (k = j = 0, len = categories.length; j < len; k = ++j) {
+      i = categories[k];
+      results.push(getProduct(i, k));
     }
     return results;
   })());

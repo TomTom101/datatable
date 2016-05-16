@@ -14,18 +14,21 @@ http = require('http').Server(app)
 
 data = []
 
-categories = ['Maschine content', 'Komplete', 'Traktor SW']
+categories = ['Maschine content', 'Komplete', 'Komplete', 'Komplete', 'Traktor SW', 'Traktor SW']
 
-getProduct = (id)->
-  numOptions=
-    min: 0
-    max: 10
-    precision: 0.5
+unitOptions=
+  min: 1
+  max: 20
+  precision: 0.5
+
+getProduct = (id, idx)->
+  price = (idx+1) * 100
   #product: faker.commerce.product()
-  id: id
-  product: categories[Math.floor(Math.random()*categories.length)];
-  price: faker.commerce.price()
-  units: faker.random.number numOptions
+  id: "#{idx+1}#{price}"
+  product: id
+  price: price
+  units: faker.random.number unitOptions
+  #array: [parseFloat(faker.commerce.price()), parseFloat(faker.commerce.price())]
 
 getBooking = ->
   date: faker.date.recent(30)
@@ -42,13 +45,15 @@ save = (data) ->
   jsonfile.writeFile file, data, (err) ->
     console.log err
 
-app.post "/data", (request, response) ->
+app.get "/files", (request, response) ->
+
+app.post "/files", (request, response) ->
   save request.body
   response.send message: "ok"
   #console.log JSON.stringify request.body
 
 app.get "/data", (request, response) ->
-  response.json (getProduct(i) for i in [1..20])
+  response.json (getProduct(i,k) for i,k in categories)
   response.end()
 
 app.get "/daily", (request, response) ->
