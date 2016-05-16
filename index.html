@@ -40,6 +40,7 @@
       <div class="row">
         <div id="toolbar">
           <button id="save-data" class="btn btn-default">Save</button>
+          <button id="compare-data" class="btn btn-default">Compare</button>
       </div>
         <table id="products"
                data-toggle="products"
@@ -57,9 +58,8 @@
           <tr>
               <th data-field="state" data-checkbox="true"/>
               <th data-field="product" data-sortable="true">Product</th>
-              <th data-field="price" data-sortable="true" data-formatter="priceFormatter" data-footer-formatter="sumFormatter">Price</th>
-              <th data-field="units" data-sortable="true">Units</th>
-              <th data-field="price" data-editable="true" data-sortable="true" data-formatter="dailyFormatter" data-footer-formatter="sumFormatter">Daily</th>
+              <th data-field="price" data-sortable="true" data-formatter="priceFormatter"> Price</th>
+              <th data-field="units" data-sortable="true" data-footer-formatter="sumFormatter">Units</th>
           </tr>
           </thead>
         </table>

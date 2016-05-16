@@ -1,45 +1,84 @@
 $products = $ '#products'
 $categories = $ '#categories'
 
+customizer = (o1, o2) ->
+  if (_.isNumber(o1) or _.isNumber o2)
+    [o1, o2]
+
+uids = (d1, d2) ->
+  _.chain (_.union d1, d2, 'id')
+  .map (d) -> d.id
+  .uniq()
+  .map (id) ->
+    o1 = _.find(d1, id: id)
+    o2 = _.find(d2, id: id)
+    _.mergeWith o1, o2, customizer
+  .value()
+
+
+compare = () ->
+  d1 = $products.bootstrapTable 'getData'
+  $.get './data', (d2) ->
+    data =  uids(d1, d2)
+    $products.bootstrapTable 'load', data
+
+
 priceFormatter = (value) ->
-  Math.round value
+  value
+  #return value if(_.isArray(value))
+  #Math.round value
+
+arrayFormatter = (value) ->
+  Math.round((value[0]/value[1] - 1 )* 100) + '%'
 
 dailyFormatter = (value) ->
   Math.round value * 10
 
+arraySumFormatter = (data) ->
+  #return if data.length is 0
+  #console.log data[0]?[@field]
+
 sumFormatter = (data) ->
-  #console.log @formatter
   sum = _.chain data
     .reduce (memo, data) =>
-      value = window[@formatter]? data[@field]
-      value = data[@field] if !value?
-      memo + parseFloat value
-    , 0.0
+      if _.isArray data[@field]
+        for i, k in data[@field]
+          memo[k] += parseFloat i# for i, k in data[@field]]
+      else
+        [memo[0] + parseFloat data[@field]]#, 0.0]
+          #[memo[k]+parseFloat(i) for i, k in data[@field]]
+      #   [sumFormatter(set) for set in data[@field]]
+      #console.log data[@field], data[@field][0]
+      # value = window[@formatter]? data[@field]
+      # value = data[@field] if !value?
+    , [0.0, 0.0]
     .value()
-  Math.floor(sum/500) * 500
+  sum
 
-groupedData = (data, filter) ->
-  # before we can use load, we need to set it up once
-  $categories.bootstrapTable data: newData unless filter
-  newData =
-    _.chain data
-    .filter filter
-    .groupBy (data) -> data.product
-    .map (data) ->
-      _.reduce data, (memo, set) ->
-        category: set.product
-        sum: parseFloat(set.price) + memo.sum
-      , sum: 0
-    .value()
-  $categories.bootstrapTable 'load', newData
+groupedData = (field) ->
+  (data, filter) ->
+    # before we can use load, we need to set it up once
+    $categories.bootstrapTable data: newData unless filter
+    newData =
+      _.chain data
+      .filter filter
+      .groupBy (data) -> data.product
+      .map (data) ->
+        _.reduce data, (memo, set) ->
+          category: set.product
+          sum: parseFloat(set[field]) + memo.sum
+        , sum: 0
+      .value()
+    #console.log newData
+    $categories.bootstrapTable 'load', newData
 
 onCheck = ->
   allData = $products.bootstrapTable 'getData'
-  groupedData allData, (data) ->
+  groupedData('units') allData, (data) ->
     !data.state
 
 $products.bootstrapTable
-  onLoadSuccess: groupedData
+  onLoadSuccess: groupedData 'units'
   onCheck: onCheck
   onCheckSome: onCheck
   onUncheck: onCheck
@@ -50,12 +89,15 @@ $products.bootstrapTable
 
 $(document).ready () ->
 
+  $('#compare-data').click ->
+    compare()
+
   $('#save-data').click ->
     data = $products.bootstrapTable 'getData'
     $.ajax
       type: 'POST'
       contentType: 'application/json'
       data: JSON.stringify(data)
-      url: './data'
+      url: './files'
       success: (data) -> console.log data
     #alert JSON.stringify data
