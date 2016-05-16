@@ -25,13 +25,14 @@ uids = function(d1, d2) {
   }).value();
 };
 
-compare = function() {
+compare = function(cb) {
   var d1;
   d1 = $products.bootstrapTable('getData');
   return $.get('./data', function(d2) {
     var data;
     data = uids(d1, d2);
-    return $products.bootstrapTable('load', data);
+    $products.bootstrapTable('load', data);
+    return cb(data);
   });
 };
 
@@ -52,18 +53,18 @@ arraySumFormatter = function(data) {};
 sumFormatter = function(data) {
   var sum;
   sum = _.chain(data).reduce((function(_this) {
-    return function(memo, data) {
+    return function(memo, set) {
       var i, j, k, len, ref, results;
-      if (_.isArray(data[_this.field])) {
-        ref = data[_this.field];
+      if (_.isArray(set[_this.field])) {
+        ref = set[_this.field];
         results = [];
         for (k = j = 0, len = ref.length; j < len; k = ++j) {
           i = ref[k];
-          results.push(memo[k] += parseFloat(i));
+          results.push(parseFloat(i) + memo[k]);
         }
         return results;
       } else {
-        return [memo[0] + parseFloat(data[_this.field])];
+        return [memo[0] + parseFloat(set[_this.field])];
       }
     };
   })(this), [0.0, 0.0]).value();
@@ -82,12 +83,27 @@ groupedData = function(field) {
       return data.product;
     }).map(function(data) {
       return _.reduce(data, function(memo, set) {
+        var i, k, sum;
+        if (_.isArray(set[field])) {
+          sum = (function() {
+            var j, len, ref, results;
+            ref = set[field];
+            results = [];
+            for (k = j = 0, len = ref.length; j < len; k = ++j) {
+              i = ref[k];
+              results.push(parseFloat(i) + memo.sum[k]);
+            }
+            return results;
+          })();
+        } else {
+          sum = [set[field] + memo.sum[0]];
+        }
         return {
           category: set.product,
-          sum: parseFloat(set[field]) + memo.sum
+          sum: sum
         };
       }, {
-        sum: 0
+        sum: [0.0, 0.0]
       });
     }).value();
     return $categories.bootstrapTable('load', newData);
@@ -117,7 +133,9 @@ $products.bootstrapTable({
 
 $(document).ready(function() {
   $('#compare-data').click(function() {
-    return compare();
+    return compare(function() {
+      return onCheck();
+    });
   });
   return $('#save-data').click(function() {
     var data;

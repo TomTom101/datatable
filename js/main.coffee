@@ -16,11 +16,12 @@ uids = (d1, d2) ->
   .value()
 
 
-compare = () ->
+compare = (cb) ->
   d1 = $products.bootstrapTable 'getData'
   $.get './data', (d2) ->
     data =  uids(d1, d2)
     $products.bootstrapTable 'load', data
+    cb data
 
 
 priceFormatter = (value) ->
@@ -40,12 +41,11 @@ arraySumFormatter = (data) ->
 
 sumFormatter = (data) ->
   sum = _.chain data
-    .reduce (memo, data) =>
-      if _.isArray data[@field]
-        for i, k in data[@field]
-          memo[k] += parseFloat i# for i, k in data[@field]]
+    .reduce (memo, set) =>
+      if _.isArray set[@field]
+        (parseFloat(i) + memo[k] for i, k in set[@field])
       else
-        [memo[0] + parseFloat data[@field]]#, 0.0]
+        [memo[0] + parseFloat set[@field]]#, 0.0]
           #[memo[k]+parseFloat(i) for i, k in data[@field]]
       #   [sumFormatter(set) for set in data[@field]]
       #console.log data[@field], data[@field][0]
@@ -65,9 +65,13 @@ groupedData = (field) ->
       .groupBy (data) -> data.product
       .map (data) ->
         _.reduce data, (memo, set) ->
+          if _.isArray set[field]
+            sum = (parseFloat(i) + memo.sum[k] for i, k in set[field])
+          else
+            sum = [set[field] + memo.sum[0]]
           category: set.product
-          sum: parseFloat(set[field]) + memo.sum
-        , sum: 0
+          sum: sum
+        , sum: [0.0, 0.0]
       .value()
     #console.log newData
     $categories.bootstrapTable 'load', newData
@@ -90,7 +94,8 @@ $products.bootstrapTable
 $(document).ready () ->
 
   $('#compare-data').click ->
-    compare()
+    compare ->
+      onCheck()
 
   $('#save-data').click ->
     data = $products.bootstrapTable 'getData'
