@@ -24,6 +24,13 @@ compare = (cb) ->
     cb data
 
 
+compareFormatter = (value) ->
+  if _.isArray value
+    pct = Math.round (value[0]/value[1]-1)*100
+    return "#{pct}% (#{value[0] - value[1]})"
+  value
+
+
 priceFormatter = (value) ->
   value
   #return value if(_.isArray(value))
@@ -53,7 +60,8 @@ sumFormatter = (data) ->
       # value = data[@field] if !value?
     , [0.0, 0.0]
     .value()
-  sum
+  sum = sum[0] if sum.length is 1 
+  compareFormatter sum
 
 groupedData = (field) ->
   (data, filter) ->

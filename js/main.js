@@ -1,4 +1,4 @@
-var $categories, $products, arrayFormatter, arraySumFormatter, compare, customizer, dailyFormatter, groupedData, onCheck, priceFormatter, sumFormatter, uids;
+var $categories, $products, arrayFormatter, arraySumFormatter, compare, compareFormatter, customizer, dailyFormatter, groupedData, onCheck, priceFormatter, sumFormatter, uids;
 
 $products = $('#products');
 
@@ -36,6 +36,15 @@ compare = function(cb) {
   });
 };
 
+compareFormatter = function(value) {
+  var pct;
+  if (_.isArray(value)) {
+    pct = Math.round((value[0] / value[1] - 1) * 100);
+    return pct + "% (" + (value[0] - value[1]) + ")";
+  }
+  return value;
+};
+
 priceFormatter = function(value) {
   return value;
 };
@@ -68,7 +77,10 @@ sumFormatter = function(data) {
       }
     };
   })(this), [0.0, 0.0]).value();
-  return sum;
+  if (sum.length === 1) {
+    sum = sum[0];
+  }
+  return compareFormatter(sum);
 };
 
 groupedData = function(field) {

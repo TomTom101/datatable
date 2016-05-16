@@ -1,4 +1,4 @@
-var app, bodyParser, categories, data, express, faker, getBooking, getProduct, http, jsonfile, save, unitOptions;
+var app, bodyParser, categories, data, express, faker, getBooking, getProduct, http, jsonfile, save, skewptions, unitOptions;
 
 express = require('express');
 
@@ -36,6 +36,12 @@ unitOptions = {
   precision: 0.5
 };
 
+skewptions = {
+  min: -2,
+  max: 2,
+  precision: 0.2
+};
+
 getProduct = function(id, idx) {
   var price;
   price = (idx + 1) * 100;
@@ -43,7 +49,8 @@ getProduct = function(id, idx) {
     id: "" + (idx + 1) + price,
     product: id,
     price: price,
-    units: faker.random.number(unitOptions)
+    units: faker.random.number(unitOptions),
+    skew: faker.random.number(skewptions)
   };
 };
 

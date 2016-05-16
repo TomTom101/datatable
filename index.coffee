@@ -21,6 +21,11 @@ unitOptions=
   max: 20
   precision: 0.5
 
+skewptions=
+  min: -2
+  max: 2
+  precision: 0.2
+
 getProduct = (id, idx)->
   price = (idx+1) * 100
   #product: faker.commerce.product()
@@ -28,6 +33,7 @@ getProduct = (id, idx)->
   product: id
   price: price
   units: faker.random.number unitOptions
+  skew: faker.random.number skewptions
   #array: [parseFloat(faker.commerce.price()), parseFloat(faker.commerce.price())]
 
 getBooking = ->
